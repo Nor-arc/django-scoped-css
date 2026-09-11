@@ -1,0 +1,4 @@
+.tile { transition: box-shadow .15s ease-in-out; }
+.tile-check:checked + .tile { --bs-card-border-color: var(--bs-primary); }
+.card { border: none; }
+.tile:hover { .preview { opacity: .9; } }

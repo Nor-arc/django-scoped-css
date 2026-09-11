@@ -1,0 +1,9 @@
+{% load scoped_css %}<!DOCTYPE html><html><head><title>t</title>
+{% scoped_css_links %}
+{% block extra_styles %}{% endblock %}
+</head><body>
+<nav class="card">host chrome</nav>
+<main class="container-fluid wrapper" id="main-content" {% css_scope_page %}>
+{% block content %}{% endblock content %}
+</main>
+</body></html>

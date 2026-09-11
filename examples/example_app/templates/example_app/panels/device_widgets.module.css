@@ -1,0 +1,81 @@
+/* ------------------------------------------------------------------ *
+ * Device widgets panel -- panels/device_widgets.html.
+ *
+ * ELEMENT SCOPE. device_widgets.html carries {% css_scope %} on its own
+ * <div>, so every selector here compiles under
+ * `data-css-example_app-panels-device_widgets` rather than under any
+ * page's attribute -- there is no page of ours to inherit from, because
+ * this panel renders inside Nautobot's OWN device detail view.
+ *
+ * Because that scope root is markup this app renders, it can itself
+ * carry the classes being styled, so the compiler emits both forms:
+ *
+ *     .device-widgets        ->  [attr] .device-widgets
+ *                                [attr].device-widgets   <- self-match
+ *
+ * The bare `.list-group-item` override below is exactly the kind of
+ * rule that used to leak across a whole deployment. Boxed into this
+ * attribute it reaches this panel and nothing else -- not the core page
+ * hosting it, and not another app's panel beside it.
+ * ------------------------------------------------------------------ */
+
+.device-widgets {
+    margin-bottom: 0;
+
+    /* Native nesting: only the top-level selector is rewritten, so `&` still
+       resolves against `.device-widgets` in the browser. */
+    & a {
+        text-decoration: none;
+    }
+}
+
+/* Safe *here* and nowhere else. Written unscoped in a global stylesheet, this
+   would restyle every list group in the deployment -- core's and every other
+   app's. That is the bug this library exists to make impossible. */
+.list-group-item {
+    padding-inline: 0;
+    background-color: transparent;
+}
+
+.device-widgets-list {
+    max-height: 18rem;
+    overflow-y: auto;
+}
+
+.device-widgets-item {
+    display: flex;
+    align-items: baseline;
+    gap: .5rem;
+}
+
+.device-widgets-meta {
+    color: var(--bs-secondary-color);
+    font-size: .875em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.device-widgets-empty {
+    color: var(--bs-secondary-color);
+    justify-content: center;
+}
+
+/* A leading type selector gets the descendant form only: `[attr]li.…` could
+   never match, because the scope attribute is on the <section>. */
+li.device-widgets-item + li.device-widgets-item {
+    border-top-color: var(--bs-border-color-translucent);
+}
+
+/* The theme attribute lives on <html>, above this panel's scope root, so the
+   compiler inserts the scope attribute AFTER that compound rather than before
+   it. Written the other way round the rule could never match. */
+[data-bs-theme="dark"] .device-widgets {
+    --bs-card-bg: var(--bs-gray-900);
+}
+
+@media (max-width: 767.98px) {
+    .device-widgets-list {
+        max-height: none;
+    }
+}

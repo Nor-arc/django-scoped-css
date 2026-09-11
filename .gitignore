@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+dist/
+*.egg-info/
+.venv/
+# compiled bundles are build outputs, never committed
+**/static/*/scoped_css/

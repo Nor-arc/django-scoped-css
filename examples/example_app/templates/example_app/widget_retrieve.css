@@ -1,0 +1,15 @@
+/* ------------------------------------------------------------------ *
+ * Widget detail page -- the GLOBAL companion to widget_retrieve.module.css.
+ *
+ * Plain `.css`, not `.module.css`: it is copied into the bundle
+ * verbatim, with no scope attribute, so its rules are global. Keep it
+ * to the rules that have to be, and say in a comment why each one is.
+ * ------------------------------------------------------------------ */
+
+/* Bootstrap moves a popover's element to the end of <body> when it is shown, so
+   it is no longer inside this page's scope root and a compiled rule could never
+   match it. `.widget-preview-img` is the class on the <img> inside the popover
+   content, which is why this stays specific rather than styling `.popover-body`. */
+.popover-body .widget-preview-img {
+    max-width: 22rem;
+}

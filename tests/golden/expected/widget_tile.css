@@ -1,0 +1,74 @@
+/* ------------------------------------------------------------------ *
+ * Widget tile -- the card rendered by components/widget_tile.html.
+ *
+ * This partial carries its own {% css_scope %}, so the file compiles
+ * under the tile's own attribute rather than the page's: every rule
+ * here is boxed into one tile, and the self-match form (`[attr].x`) is
+ * emitted alongside the descendant form, because the scope attribute
+ * sits on the tile's own root element.
+ *
+ * The markup leans on Bootstrap utilities for spacing and typography;
+ * only the rules with no utility equivalent live here.
+ * ------------------------------------------------------------------ */
+
+[data-css-example_app-widget_tile] .widget-tile, [data-css-example_app-widget_tile].widget-tile {
+    display: flex;
+    flex-direction: column;
+    min-height: 10rem;
+    transition: box-shadow .15s ease-in-out, border-color .15s ease-in-out;
+
+    /* Native nesting: only the top-level selector above is rewritten, so `&`
+       still resolves against `.widget-tile` in the browser. */
+    & .widget-tile-body {
+        flex: 1 1 auto;
+        overflow: hidden;
+    }
+
+    &:focus-within {
+        border-color: var(--bs-primary-border-subtle);
+    }
+}
+
+/* The host theme draws a border on every card; inside this scope we trade it
+   for the subtle shadow the design asks for. Overriding the Bootstrap card
+   variables keeps the padding in step with the rest of the card. */
+[data-css-example_app-widget_tile] .widget-tile.card, [data-css-example_app-widget_tile].widget-tile.card {
+    --bs-card-border-color: transparent;
+    --bs-card-spacer-y: .75rem;
+    box-shadow: var(--bs-box-shadow-sm);
+}
+
+/* A leading type selector never gets the self-match form: the scope attribute
+   is on the tile wrapper, which is not itself a <div class="card">. */
+[data-css-example_app-widget_tile] div.card > .card-header {
+    border-bottom: 0;
+}
+
+/* The checkbox is visually hidden and drives the selected state of the tile
+   that follows it. */
+[data-css-example_app-widget_tile] .widget-tile-check + .widget-tile, [data-css-example_app-widget_tile].widget-tile-check + .widget-tile {
+    cursor: pointer;
+}
+
+[data-css-example_app-widget_tile] .widget-tile-check:checked + .widget-tile, [data-css-example_app-widget_tile].widget-tile-check:checked + .widget-tile {
+    border-color: var(--bs-primary);
+}
+
+[data-css-example_app-widget_tile] .widget-tile-check:not(:checked) + .widget-tile .widget-tile-actions, [data-css-example_app-widget_tile].widget-tile-check:not(:checked) + .widget-tile .widget-tile-actions {
+    visibility: hidden;
+}
+
+@media (hover: hover) {
+    /* Only selectable tiles lift on hover; touch devices get no hover state. */
+    [data-css-example_app-widget_tile] .widget-tile-check + .widget-tile:hover, [data-css-example_app-widget_tile].widget-tile-check + .widget-tile:hover {
+        box-shadow: var(--bs-box-shadow);
+    }
+}
+
+@container widget-tile (min-width: 22rem) {
+    [data-css-example_app-widget_tile] .widget-tile-body, [data-css-example_app-widget_tile].widget-tile-body {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: .75rem;
+    }
+}

@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{# The zero-template-edit story: this page carries no scoped_css tag at all. #}
+{% block content %}
+<div class="row">
+  <p class="zero-edit">nothing to edit here</p>
+  {% include "testapp/inc/modal.html" %}
+</div>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% comment %}
+  Fetched by hx-get from widget_retrieve.html, so no static walk can reach it. It joins that
+  page's bundle only because widget_retrieve.html names it in {% css_dep %}. No {% css_scope %}:
+  it is swapped INTO the page's scope root, so it inherits the page's attribute and its rules are
+  already loaded and already scoped by the time htmx puts it on screen.
+{% endcomment %}
+<table class="widget-table table table-sm align-middle">
+    <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Description</th>
+            <th scope="col" class="text-end">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for widget in widgets %}
+            <tr>
+                <td><a href="{{ widget.get_absolute_url }}">{{ widget }}</a></td>
+                <td class="widget-table-description">{{ widget.description|default:"—" }}</td>
+                <td class="text-end">
+                    <a class="btn btn-sm btn-outline-secondary" href="{{ widget.get_absolute_url }}">Open</a>
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="3" class="widget-table-empty">No widgets on this device yet.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

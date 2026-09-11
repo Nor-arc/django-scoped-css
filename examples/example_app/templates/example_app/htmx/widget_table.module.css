@@ -1,0 +1,36 @@
+/* ------------------------------------------------------------------ *
+ * Device widget table -- htmx/widget_table.html.
+ *
+ * The fragment is swapped in by hx-get, so these rules must already be
+ * in the page's bundle when it lands. They are, because
+ * widget_retrieve.html declares {% css_dep %} on the fragment.
+ * ------------------------------------------------------------------ */
+
+/* Core's table styling assumes a full-width page; inside the detail aside the
+   cells need to be tighter. Scoped, so no other .table in the deployment moves. */
+.widget-table > :not(caption) > * > * {
+    padding-block: .35rem;
+}
+
+.widget-table-description {
+    max-width: 24rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.widget-table-empty {
+    color: var(--bs-secondary-color);
+    text-align: center;
+    padding-block: 1.5rem;
+}
+
+/* The slot keeps its height while the fragment is in flight, so the page does
+   not jump when htmx swaps the table in. */
+.widget-table-slot {
+    min-height: 8rem;
+}
+
+.widget-table-placeholder {
+    color: var(--bs-secondary-color);
+}

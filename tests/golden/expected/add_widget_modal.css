@@ -1,0 +1,71 @@
+/* ------------------------------------------------------------------ *
+ * "Add widget" modal -- inc/add_widget_modal.html.
+ *
+ * Historical note: every selector in this file used to begin with the
+ * hand-written `.acme-` wrapper class below, which is how the app kept
+ * its modal rules off the host's own modals. The scope attribute does
+ * that job now; the wrapper class survives only because the markup
+ * still hangs a couple of state toggles off it.
+ * ------------------------------------------------------------------ */
+
+/* Roomier, consistent padding across header/body/footer: Bootstrap ships
+   --bs-modal-padding: 1rem, which leaves the content cramped against the modal
+   edges, and the utility classes cannot fix it because header and footer do not
+   read --bs-modal-padding directly. */
+[data-css-example_app-add_widget_modal] .acme-add-widget-modal {
+    --bs-modal-padding: 1.5rem;
+    --bs-modal-header-padding: 1.25rem 1.5rem;
+}
+
+[data-css-example_app-add_widget_modal] .acme-add-widget-modal .modal-body {
+    padding: 0;
+}
+
+/* Title and subtitle stack on the left, so the close button aligns to the top. */
+[data-css-example_app-add_widget_modal] .acme-add-widget-modal .modal-header {
+    align-items: flex-start;
+}
+
+/* The option cards sit side by side and reflow onto two rows on a short
+   viewport, so the modal body never grows a scrollbar of its own. */
+[data-css-example_app-add_widget_modal] .acme-add-widget-modal .widget-option-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    padding: 2.5rem .5rem;
+}
+
+[data-css-example_app-add_widget_modal] .widget-option-card {
+    position: relative;
+    flex: 1 1 17.5rem;
+    max-width: 18.75rem;
+    border: .0625rem solid var(--bs-border-color);
+    border-radius: var(--bs-border-radius);
+    background-image: url(data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2016%2016%22%3E%3Cpath%20d=%22M8%200v16M0%208h16%22%20stroke=%22%23adb5bd%22/%3E%3C/svg%3E);
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Both headings inside the card share one rule; the comma inside :is() is not a
+   selector boundary. */
+[data-css-example_app-add_widget_modal] .widget-option-card :is(.card-title, .card-subtitle) {
+    margin-bottom: .25rem;
+}
+
+/* The tick is drawn from a CSS escape rather than an icon font, so the card does
+   not depend on the host's icon set having been loaded. */
+[data-css-example_app-add_widget_modal] .widget-option-input:checked + .widget-option-card::after {
+    content: "✓";
+    font-family: "Helvetica Neue", Helvetica, sans-serif;
+    position: absolute;
+    top: .5rem;
+    right: .75rem;
+    color: var(--bs-success);
+}
+
+/* Bootstrap sizes footer buttons from their text; the design wants them equal,
+   and the width has to beat the theme's own .btn rule. */
+[data-css-example_app-add_widget_modal] #addWidgetModal .modal-footer .btn {
+    min-width: 7.5rem !important;
+}

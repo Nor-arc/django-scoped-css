@@ -1,0 +1,7 @@
+.self-panel {
+    margin-bottom: 1rem;
+}
+
+div.self-panel-note {
+    color: var(--bs-secondary-color);
+}

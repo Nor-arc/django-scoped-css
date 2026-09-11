@@ -1,0 +1,6 @@
+{% extends scoped_css_root_parent|default:"base_django.html" %}
+{% load scoped_css %}
+{% block extra_styles %}
+    {% scoped_css_links %}
+    {% block app_extra_styles %}{% endblock %}
+{% endblock %}

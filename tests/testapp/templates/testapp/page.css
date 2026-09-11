@@ -1,0 +1,2 @@
+/* global within the page: tooltips portal to <body> */
+.tooltip-inner { max-width: 22rem; }

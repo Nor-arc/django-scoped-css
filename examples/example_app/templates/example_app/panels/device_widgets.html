@@ -1,0 +1,42 @@
+{% load scoped_css %}{% scoped_css_links "example_app/panels/device_widgets.html" %}
+{% comment %}
+  The body of a TemplateExtension panel, rendered by template_content.DeviceWidgetsExtension into
+  the CORE device detail view. Nautobot draws the surrounding card; this template draws what goes
+  inside it. Two things here are different from every other template in this app, and both follow
+  from that one fact:
+
+  1. `{% scoped_css_links "<this template>" %}` — the <link>, in-body.
+     ScopedCSSMixin cannot help: the view is core's, not this app's, so nothing reparents the page
+     onto scoped_css/root.html, and `context.template.name` is a core template with no bundle of
+     its own. Naming itself here does two jobs at once: it makes this template an ENTRY with its
+     own bundle (ARCHITECTURE.md § Vocabulary), and it delivers that bundle's <link> from inside
+     <body>, which is valid HTML5. The tag emits it at most once per request per entry, so a panel
+     rendered several times on one page still produces exactly one <link>.
+     After the core change this line goes away too — core will emit it.
+
+  2. `{% css_scope %}` on the root element — MANDATORY, not optional.
+     On a page this app owns, a partial may inherit the page's scope. Here there is no such page:
+     the scope root would have to be core's device detail view, which this app has no business
+     claiming. So the panel is its own scope root, and every rule in device_widgets.module.css is
+     boxed into this one <div> — which is exactly the guarantee a core page has the right to
+     expect from a third-party panel.
+
+  `object` is the Device: Panel.render_body_content() passes the whole flattened page context
+  through to this template.
+{% endcomment %}
+<div class="device-widgets" {% css_scope %}>
+    <ul class="device-widgets-list list-group list-group-flush">
+        {% for widget in object.widgets.all %}
+            <li class="device-widgets-item list-group-item">
+                <a href="{{ widget.get_absolute_url }}">{{ widget }}</a>
+                {% if widget.description %}
+                    <span class="device-widgets-meta">{{ widget.description }}</span>
+                {% endif %}
+            </li>
+        {% empty %}
+            <li class="device-widgets-item device-widgets-empty list-group-item">
+                No widgets are assigned to this device.
+            </li>
+        {% endfor %}
+    </ul>
+</div>

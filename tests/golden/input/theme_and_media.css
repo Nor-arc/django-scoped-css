@@ -1,0 +1,57 @@
+/* ------------------------------------------------------------------ *
+ * Theme and viewport adjustments for the widget detail page.
+ *
+ * `[data-bs-theme]` is set on <html> by the host's theme switcher, far
+ * above this page's scope root, so the compiler inserts the scope
+ * attribute *after* that compound rather than in front of it. Written
+ * the other way round, the rule could never match.
+ * ------------------------------------------------------------------ */
+
+.widget-card {
+    border-radius: var(--bs-border-radius-lg);
+    transition: box-shadow .15s ease-in-out;
+}
+
+[data-bs-theme="dark"] .widget-card {
+    --bs-card-bg: var(--bs-gray-900);
+    box-shadow: none;
+}
+
+[data-bs-theme="dark"] .widget-card .widget-card-meta {
+    color: var(--bs-gray-400);
+}
+
+@media (hover: hover) {
+    .widget-card:hover {
+        box-shadow: var(--bs-box-shadow-sm);
+    }
+
+    /* Shadows read as mud on a dark background, so the hover affordance there is
+       a hairline instead. */
+    [data-bs-theme="dark"] .widget-card:hover {
+        box-shadow: 0 0 0 .0625rem var(--bs-gray-700);
+    }
+}
+
+@media (min-width: 992px) {
+    /* Two columns, but only where the browser can actually do subgrid. */
+    @supports (grid-template-rows: subgrid) {
+        .widget-detail-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+            gap: 1.5rem;
+        }
+
+        .widget-detail-grid > .widget-detail-aside {
+            grid-row: span 2;
+        }
+    }
+}
+
+@media print {
+    .widget-card,
+    .widget-detail-aside {
+        box-shadow: none;
+        break-inside: avoid;
+    }
+}

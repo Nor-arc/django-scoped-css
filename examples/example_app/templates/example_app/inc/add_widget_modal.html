@@ -1,0 +1,38 @@
+{% comment %}
+  No {% css_scope %}: like components/widget_tile.html this partial inherits the including page's
+  scope. Bootstrap leaves a modal where it is in the DOM (unlike a tooltip or popover, which it
+  moves to <body>), so the page's scope root is still an ancestor and the compiled rules match.
+{% endcomment %}
+<div class="add-widget-modal modal fade" id="addWidgetModal" tabindex="-1"
+     aria-labelledby="addWidgetModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div>
+                    <h1 class="modal-title fs-5" id="addWidgetModalLabel">Add a widget</h1>
+                    <p class="text-body-secondary mb-0">Pick a starting point.</p>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="widget-option-row">
+                    {% for option in widget_options %}
+                        <input class="widget-option-input visually-hidden" type="radio" name="option"
+                               id="widget-option-{{ forloop.counter }}" value="{{ option.value }}">
+                        <label class="widget-option-card card" for="widget-option-{{ forloop.counter }}">
+                            <div class="card-body">
+                                <h2 class="card-title h6">{{ option.label }}</h2>
+                                <h3 class="card-subtitle h6 text-body-secondary">{{ option.summary }}</h3>
+                            </div>
+                        </label>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                {# js- hook: behaviour only, never selected by a stylesheet in this app. #}
+                <button type="submit" class="btn btn-primary js-add-widget-submit">Add</button>
+            </div>
+        </div>
+    </div>
+</div>

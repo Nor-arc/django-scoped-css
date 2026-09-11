@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% load scoped_css %}
+{% block content %}
+<div class="row" {% css_scope %}>
+  {% for i in "123" %}{% include "testapp/components/tile.html" %}{% endfor %}
+  {% include "testapp/inc/modal.html" %}
+  {% css_dep "testapp/htmx/fragment.html" %}
+</div>
+{% endblock %}

@@ -1,0 +1,5 @@
+{% load scoped_css %}{% scoped_css_links "testapp/panels/self_entry.html" %}
+{# A self-declaring entry: it extends nothing, names itself above, and owns its own scope root. #}
+<div class="card self-panel" {% css_scope %}>
+  <div class="card-body">{% include "testapp/components/tile.html" %}</div>
+</div>

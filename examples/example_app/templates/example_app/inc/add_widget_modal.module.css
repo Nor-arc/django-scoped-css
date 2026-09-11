@@ -1,0 +1,77 @@
+/* ------------------------------------------------------------------ *
+ * "Add widget" modal -- inc/add_widget_modal.html.
+ *
+ * Historical note, and the reason this file is in the example: every
+ * selector here used to begin with a hand-written `.acme-` wrapper
+ * class, which is how the app kept its modal rules off the host's own
+ * modals. That is the prefix anti-pattern -- it works right up until
+ * someone forgets, and nothing tells them they did. The scope attribute
+ * does the same job mechanically, so the prefix is gone from every
+ * styled name below; only `.js-*` hooks keep a prefix, and those are
+ * never styled (see the template).
+ *
+ * This partial carries no {% css_scope %}, so it compiles under the
+ * page's attribute -- the default, and what you want for a modal that
+ * is only ever opened from this one page.
+ * ------------------------------------------------------------------ */
+
+/* Roomier, consistent padding across header/body/footer: Bootstrap ships
+   --bs-modal-padding: 1rem, which leaves the content cramped against the modal
+   edges, and the utility classes cannot fix it because header and footer do not
+   read --bs-modal-padding directly. */
+.add-widget-modal {
+    --bs-modal-padding: 1.5rem;
+    --bs-modal-header-padding: 1.25rem 1.5rem;
+}
+
+.add-widget-modal .modal-body {
+    padding: 0;
+}
+
+/* Title and subtitle stack on the left, so the close button aligns to the top. */
+.add-widget-modal .modal-header {
+    align-items: flex-start;
+}
+
+/* The option cards sit side by side and reflow onto two rows on a short
+   viewport, so the modal body never grows a scrollbar of its own. */
+.add-widget-modal .widget-option-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    padding: 2.5rem .5rem;
+}
+
+.widget-option-card {
+    position: relative;
+    flex: 1 1 17.5rem;
+    max-width: 18.75rem;
+    border: .0625rem solid var(--bs-border-color);
+    border-radius: var(--bs-border-radius);
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Both headings inside the card share one rule; the comma inside :is() is not a
+   selector boundary. */
+.widget-option-card :is(.card-title, .card-subtitle) {
+    margin-bottom: .25rem;
+}
+
+/* The tick is drawn from a CSS escape rather than an icon font, so the card does
+   not depend on the host's icon set having been loaded. */
+.widget-option-input:checked + .widget-option-card::after {
+    content: "\2713";
+    font-family: 'Helvetica Neue', Helvetica, sans-serif;
+    position: absolute;
+    top: .5rem;
+    right: .75rem;
+    color: var(--bs-success);
+}
+
+/* Bootstrap sizes footer buttons from their text; the design wants them equal,
+   and the width has to beat the theme's own .btn rule. */
+#addWidgetModal .modal-footer .btn {
+    min-width: 7.5rem !important;
+}

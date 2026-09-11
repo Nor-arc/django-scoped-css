@@ -1,0 +1,75 @@
+/* ------------------------------------------------------------------ *
+ * Widget tile -- the card rendered by components/widget_tile.html.
+ *
+ * widget_tile.html carries NO {% css_scope %}, so this file compiles
+ * under the attribute of whichever page includes it -- the default.
+ * A page's scope root is the content wrapper (core's <main> after the
+ * core change), which never carries this app's classes, so the
+ * compiler emits the descendant form `[attr] .widget-tile` only and
+ * skips the self-match form `[attr].widget-tile` as dead weight.
+ *
+ * The markup leans on Bootstrap utilities for spacing and typography;
+ * only the rules with no utility equivalent live here.
+ * ------------------------------------------------------------------ */
+
+.widget-tile {
+    display: flex;
+    flex-direction: column;
+    min-height: 10rem;
+    transition: box-shadow .15s ease-in-out, border-color .15s ease-in-out;
+
+    /* Native nesting: only the top-level selector above is rewritten, so `&`
+       still resolves against `.widget-tile` in the browser. */
+    & .widget-tile-body {
+        flex: 1 1 auto;
+        overflow: hidden;
+    }
+
+    &:focus-within {
+        border-color: var(--bs-primary-border-subtle);
+    }
+}
+
+/* The host theme draws a border on every card; inside this scope we trade it
+   for the subtle shadow the design asks for. Overriding the Bootstrap card
+   variables keeps the padding in step with the rest of the card. */
+.widget-tile.card {
+    --bs-card-border-color: transparent;
+    --bs-card-spacer-y: .75rem;
+    box-shadow: var(--bs-box-shadow-sm);
+}
+
+/* `.card-header` is core's class on an element this partial renders; scoping it
+   is what keeps the override off every other card in the deployment. */
+div.card > .card-header {
+    border-bottom: 0;
+}
+
+/* The checkbox is visually hidden and drives the selected state of the tile
+   that follows it. */
+.widget-tile-check + .widget-tile {
+    cursor: pointer;
+}
+
+.widget-tile-check:checked + .widget-tile {
+    border-color: var(--bs-primary);
+}
+
+.widget-tile-check:not(:checked) + .widget-tile .widget-tile-actions {
+    visibility: hidden;
+}
+
+@media (hover: hover) {
+    /* Only selectable tiles lift on hover; touch devices get no hover state. */
+    .widget-tile-check + .widget-tile:hover {
+        box-shadow: var(--bs-box-shadow);
+    }
+}
+
+@container widget-tile (min-width: 22rem) {
+    .widget-tile-body {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: .75rem;
+    }
+}

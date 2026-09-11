@@ -1,0 +1,77 @@
+/* ------------------------------------------------------------------ *
+ * Widget list view -- tile grid.
+ *
+ * Reuses the host's tile component and adds only what the utility
+ * classes cannot express. The `.card` / `.table-responsive` resets
+ * below target wrapper elements rendered by the core list template,
+ * which is exactly the kind of rule that used to leak app-wide: under
+ * a page scope they reach the wrappers on this page and nothing else.
+ * ------------------------------------------------------------------ */
+
+.card {
+    border: none;
+    box-shadow: none;
+}
+
+.table-responsive {
+    overflow: visible;
+}
+
+/* Responsive tile grid: 1 / 2 / 3 columns. */
+.widget-tiles {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+
+@media (min-width: 768px) {
+    .widget-tiles {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 1200px) {
+    .widget-tiles {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+/* Whatever the host names its tile element this release, it gets the same
+   gutter. The attribute *value* is a string, never a selector, so the compiler
+   leaves it exactly as written. */
+.widget-tiles [class*="tile"] {
+    margin-bottom: 0;
+}
+
+/* A filter chip and every chip after it share one row. */
+.widget-filter-chip ~ .widget-filter-chip {
+    margin-left: .25rem;
+}
+
+/* The empty state fades in once, after htmx swaps the table fragment in. */
+@keyframes widget-list-fade-in {
+    0% {
+        opacity: 0;
+        transform: translateY(.25rem);
+    }
+    60% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+.widget-list-empty {
+    animation: widget-list-fade-in .2s ease-out both;
+}
+
+/*
+ * NOT HERE, ON PURPOSE: the tile preview popover.
+ *
+ * Bootstrap moves a popover's element to the end of <body> when it is shown,
+ * which is outside this page's scope root, so a rule compiled under the page
+ * attribute could never match it. Those rules live in the page's plain `.css`
+ * companion instead, where they are copied into the bundle verbatim.
+ */

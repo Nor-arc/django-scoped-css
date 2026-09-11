@@ -1,0 +1,46 @@
+{% extends "generic/object_retrieve.html" %}
+{% load scoped_css %}
+
+{% comment %}
+  The same one-line interim wrapper as widget_list.html -- see ARCHITECTURE.md § Delivery.
+  Deleted once Nautobot core stamps <main id="main-content"> with {% css_scope_page %}.
+{% endcomment %}
+{% block content %}
+<div class="widget-detail" {% css_scope %}>
+    {{ block.super }}
+
+    {% comment %}
+      {% css_dep %} renders nothing. It is a BUILD-TIME edge: the table fragment below arrives by
+      hx-get, long after the build ran, so no static walk can see it. Naming it here puts
+      htmx/widget_table.module.css into THIS page's bundle, already compiled under this page's
+      attribute and already loaded when htmx swaps the fragment in. Without it the stylesheet is
+      an orphan and `manage.py check` reports scoped_css.W003.
+    {% endcomment %}
+    {% css_dep "example_app/htmx/widget_table.html" %}
+
+    <section class="widget-detail-grid">
+        <div class="widget-tiles">
+            {% for related in object.device.widgets.all %}
+                {% include "example_app/components/widget_tile.html" with widget=related %}
+            {% endfor %}
+        </div>
+
+        <aside class="widget-detail-aside">
+            <h2 class="h6">Widgets on this device</h2>
+            {% comment %}
+              `js-widget-table` is a JAVASCRIPT HOOK, never a styling hook: it keeps its `js-`
+              prefix precisely so a reader can tell at a glance that deleting it breaks behaviour
+              rather than looks, and so no stylesheet in this app may ever select it.
+            {% endcomment %}
+            <div class="widget-table-slot js-widget-table"
+                 hx-get="{% url 'plugins:example_app:widget_widget_table' pk=object.pk %}"
+                 hx-trigger="load"
+                 hx-swap="innerHTML">
+                <span class="widget-table-placeholder">Loading&hellip;</span>
+            </div>
+        </aside>
+    </section>
+
+    {% include "example_app/inc/add_widget_modal.html" %}
+</div>
+{% endblock %}

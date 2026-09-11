@@ -1,0 +1,43 @@
+/* ------------------------------------------------------------------ *
+ * Deliberately awkward corners of a real stylesheet, kept as a golden
+ * so the compiler's behaviour on them is pinned rather than
+ * rediscovered one bug report at a time.
+ * ------------------------------------------------------------------ */
+
+/* A bare outer selector is global by definition -- there is no scope root above
+   <body> to hang the attribute on -- so the compiler passes it through
+   untouched and warns. The author is meant to see the warning and move the rule
+   into a plain `.css`, where being global is the point. */
+body {
+    --example-app-tile-gap: 1rem;
+}
+
+:root {
+    --example-app-tile-min-width: 17.5rem;
+}
+
+/* Only the bare outer selector in a comma list is skipped; its neighbours are
+   scoped as usual, and the author's line breaks survive. */
+body,
+[data-css-example_app-edge_cases] .widget-empty-state {
+    background-color: var(--bs-body-bg);
+}
+
+/* A universal selector gets the descendant form only: the scope holder is an
+   ancestor element, and `[attr]*` would be a different rule. */
+[data-css-example_app-edge_cases] * .widget-truncate {
+    min-width: 0;
+}
+
+/* A string in a declaration is never a selector, however much it looks like
+   one, and neither is the text of this comment: .widget-tile */
+[data-css-example_app-edge_cases] .widget-empty-state::after {
+    content: ".widget-tile";
+    display: none;
+}
+
+/* An empty rule is still a rule. */
+[data-css-example_app-edge_cases] .widget-placeholder {
+}
+
+/* Trailing comment, with nothing after it. */

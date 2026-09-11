@@ -1,0 +1,26 @@
+{% load scoped_css %}
+{% comment %}
+  NO {% css_scope %} HERE, ON PURPOSE.
+
+  This partial inherits the scope of whichever page includes it (ARCHITECTURE.md § Vocabulary,
+  scope(T) = scope(includer)), so widget_tile.module.css compiles under the *page's* attribute and
+  a tile included from two pages styles identically in both. That is the default, and it is what
+  you want unless a partial's rules are aggressive enough to need boxing in -- see
+  panels/device_widgets.html for the opposite choice and the reason for it.
+{% endcomment %}
+<div class="widget-tile card">
+    <input class="widget-tile-check visually-hidden" type="checkbox"
+           id="widget-tile-{{ widget.pk }}" name="pk" value="{{ widget.pk }}">
+    <div class="card-header">
+        <label class="stretched-link" for="widget-tile-{{ widget.pk }}">{{ widget }}</label>
+    </div>
+    <div class="widget-tile-body card-body">
+        <p class="text-body-secondary mb-0">{{ widget.description|default:"—" }}</p>
+        {% if widget.device %}
+            <span class="widget-filter-chip badge text-bg-secondary">{{ widget.device }}</span>
+        {% endif %}
+    </div>
+    <div class="widget-tile-actions card-footer">
+        <a class="btn btn-sm btn-outline-secondary" href="{{ widget.get_absolute_url }}">Open</a>
+    </div>
+</div>

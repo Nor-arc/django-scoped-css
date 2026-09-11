@@ -1,0 +1,18 @@
+{% extends "generic/object_list.html" %}
+{% load scoped_css %}
+
+{% comment %}
+  The ONE interim line, per ARCHITECTURE.md § Delivery.
+
+  Nautobot core does not stamp <main id="main-content"> with the page's scope attribute yet, so
+  the author puts it on the outermost element of the content block instead. `{{ block.super }}`
+  keeps the whole core list view inside the scope, which is the point: `.card { border: none }` in
+  widget_list.module.css is meant to reach the wrappers core renders on THIS page and nowhere else.
+
+  After the core change this whole block is deleted; the stylesheets stay exactly as they are.
+{% endcomment %}
+{% block content %}
+<div class="widget-list" {% css_scope %}>
+    {{ block.super }}
+</div>
+{% endblock %}

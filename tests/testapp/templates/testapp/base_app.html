@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{# An in-app base: its colocated stylesheet belongs to every page that extends it. #}
+{% block content %}
+<div class="app-shell">
+  {% include "testapp/inc/modal.html" %}
+  {% block app_content %}{% endblock %}
+</div>
+{% endblock %}
